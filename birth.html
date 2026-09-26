@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Festival Birthday Celebration</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Luxury Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at center, #1b0c2e 0%, #080310 100%);
+            overflow-x: hidden;
+        }
+        
+        .font-cinzel { font-family: 'Cinzel Decorative', serif; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+
+        /* Festival Twinkling Fairy Lights */
+        .string {
+            stroke: rgba(255, 255, 255, 0.2);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .bulb {
+            width: 14px;
+            height: 20px;
+            border-radius: 50% 50% 40% 40%;
+            position: absolute;
+            animation: twinkle 1.2s infinite alternate ease-in-out;
+            box-shadow: 0 0 16px currentColor;
+        }
+
+        @keyframes twinkle {
+            0% { transform: scale(0.85); opacity: 0.4; filter: brightness(0.6); }
+            100% { transform: scale(1.15); opacity: 1; filter: brightness(1.4); }
+        }
+
+        /* Hanging Festival Lanterns */
+        .lantern {
+            box-shadow: 0 0 40px rgba(255, 204, 0, 0.6);
+            animation: swingLantern 3.5s ease-in-out infinite alternate;
+            transform-origin: top center;
+        }
+
+        @keyframes swingLantern {
+            0% { transform: rotate(-6deg); }
+            100% { transform: rotate(6deg); }
+        }
+
+        /* Cake Tier Styling & Shadows */
+        .tier-shadow {
+            box-shadow: inset 0 -15px 30px rgba(0,0,0,0.3), 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .frosting-drip {
+            background: #fffdfa;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Realistic Candle Flame */
+        .flame {
+            width: 14px;
+            height: 28px;
+            background: linear-gradient(to top, #ff7700, #ffff66);
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px #ff9900, 0 0 35px #ff3300;
+            animation: flicker 0.12s infinite alternate ease-in-out;
+            transform-origin: bottom center;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .flame.extinguished {
+            opacity: 0;
+            animation: none;
+            box-shadow: none;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1) rotate(-3deg); }
+            100% { transform: translateX(-50%) scale(1.12) rotate(3deg); }
+        }
+
+        /* Smoke Particle Animation */
+        .smoke {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            width: 8px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.65);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            animation: riseSmoke 1.2s forwards ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes riseSmoke {
+            0% { transform: translateX(-50%) translateY(0) scale(0.4); opacity: 0.9; }
+            100% { transform: translateX(-50%) translateY(-50px) scale(2.2); opacity: 0; }
+        }
+
+        /* Floating Balloons */
+        @keyframes floatBalloon {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-25px) rotate(4deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .balloon-wrap {
+            animation: floatBalloon 4.5s ease-in-out infinite;
+        }
+        .balloon-wrap:nth-child(even) {
+            animation-duration: 6s;
+            animation-delay: 1.5s;
+        }
+    </style>
+</head>
+<body class="min-h-full flex flex-col justify-between text-white relative selection:bg-pink-500 selection:text-white">
+
+    <!-- Magical Sparkle & Firework Canvas -->
+    <canvas id="particleCanvas" class="absolute inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Top Fairy Lights String -->
+    <div class="absolute top-0 left-0 w-full overflow-hidden h-24 pointer-events-none z-10 hidden md:block">
+        <svg class="absolute w-full h-16" preserveAspectRatio="none" viewBox="0 0 1200 60">
+            <path class="string" d="M0,10 Q300,55 600,10 T1200,10" />
+            <path class="string" d="M0,22 Q300,65 600,22 T1200,22" style="opacity: 0.1;" />
+        </svg>
+        <div class="absolute top-7 left-[8%] bulb text-amber-300" style="background-color: #ffd700; animation-delay: 0.1s;"></div>
+        <div class="absolute top-12 left-[18%] bulb text-pink-400" style="background-color: #ff69b4; animation-delay: 0.4s;"></div>
+        <div class="absolute top-13 left-[28%] bulb text-cyan-300" style="background-color: #00ffff; animation-delay: 0.7s;"></div>
+        <div class="absolute top-12 left-[38%] bulb text-amber-300" style="background-color: #ffae00; animation-delay: 0.2s;"></div>
+        <div class="absolute top-8 left-[48%] bulb text-emerald-300" style="background-color: #50c878; animation-delay: 0.5s;"></div>
+        <div class="absolute top-12 left-[58%] bulb text-pink-400" style="background-color: #ff69b4; animation-delay: 0.8s;"></div>
+        <div class="absolute top-13 left-[68%] bulb text-cyan-300" style="background-color: #00ffff; animation-delay: 0.3s;"></div>
+        <div class="absolute top-12 left-[78%] bulb text-amber-300" style="background-color: #ffd700; animation-delay: 0.6s;"></div>
+        <div class="absolute top-7 left-[88%] bulb text-purple-400" style="background-color: #da70d6; animation-delay: 0.9s;"></div>
+    </div>
+
+    <!-- Hanging Festival Lanterns (Left & Right) -->
+    <div class="absolute top-0 left-6 md:left-20 z-10 flex flex-col items-center pointer-events-none">
+        <div class="w-0.5 h-20 bg-amber-200/30"></div>
+        <div class="lantern w-14 h-20 bg-gradient-to-b from-amber-400 to-orange-600 rounded-full border-2 border-yellow-200/50 flex items-center justify-center shadow-2xl">
+            <div class="w-9 h-12 border border-yellow-200/40 rounded-full flex items-center justify-center">
+                <div class="w-2.5 h-2.5 bg-white rounded-full shadow-[0_0_15px_#fff]"></div>
+            </div>
+        </div>
+    </div>
+    <div class="absolute top-0 right-6 md:right-20 z-10 flex flex-col items-center pointer-events-none">
+        <div class="w-0.5 h-28 bg-amber-200/30"></div>
+        <div class="lantern w-14 h-20 bg-gradient-to-b from-amber-400 to-orange-600 rounded-full border-2 border-yellow-200/50 flex items-center justify-center shadow-2xl" style="animation-delay: 1.8s;">
+            <div class="w-9 h-12 border border-yellow-200/40 rounded-full flex items-center justify-center">
+                <div class="w-2.5 h-2.5 bg-white rounded-full shadow-[0_0_15px_#fff]"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header & Interactive Controls bar -->
+    <header class="w-full max-w-5xl mx-auto px-4 pt-6 pb-2 flex justify-between items-center z-20">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-amber-300 text-xs sm:text-sm font-medium shadow-lg">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Grand Celebration Festival
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <!-- Audio Toggle Button -->
+            <button id="audioToggleBtn" onclick="toggleAudio()" class="px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full text-xs sm:text-sm font-medium transition-all flex items-center gap-2 shadow-lg">
+                <i id="audioIcon" class="fa-solid fa-volume-xmark text-amber-300"></i> <span id="audioText" class="hidden sm:inline">Play Music</span>
+            </button>
+            <!-- Customizer Toggle Button -->
+            <button onclick="toggleEditModal()" class="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 rounded-full text-xs sm:text-sm font-semibold shadow-lg transition-all flex items-center gap-2 border border-pink-300/30">
+                <i class="fa-solid fa-pen-nib"></i> Customize Greeting
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Celebration Stage -->
+    <main class="relative flex-grow flex flex-col items-center justify-center px-4 py-4 z-20">
+        
+        <!-- Floating Balloons on Left & Right Edges with Glowing Strings -->
+        <div class="absolute left-3 sm:left-10 md:left-20 bottom-12 flex flex-col items-center gap-8 pointer-events-none z-10">
+            <div class="balloon-wrap flex flex-col items-center">
+                <div class="w-16 h-22 sm:w-22 sm:h-30 bg-gradient-to-br from-pink-500 to-rose-700 rounded-[50%_50%_50%_50%/40%_40%_60%_60%] shadow-[inset_-12px_-12px_24px_rgba(0,0,0,0.35),0_15px_30px_rgba(244,63,94,0.4)] relative flex items-center justify-center">
+                    <div class="w-3.5 h-4.5 bg-pink-300/40 rounded-full absolute top-3 left-4 blur-[1px]"></div>
+                    <div class="w-2.5 h-3.5 bg-rose-900 absolute -bottom-2 rounded-sm"></div>
+                </div>
+                <div class="w-0.5 h-24 bg-gradient-to-b from-white/60 to-amber-300/20 shadow-[0_0_8px_rgba(255,215,0,0.5)]"></div>
+            </div>
+            <div class="balloon-wrap flex flex-col items-center" style="animation-delay: 1.2s;">
+                <div class="w-14 h-20 sm:w-18 sm:h-26 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-[50%_50%_50%_50%/40%_40%_60%_60%] shadow-[inset_-10px_-10px_20px_rgba(0,0,0,0.35),0_15px_30px_rgba(6,182,212,0.4)] relative">
+                    <div class="w-3 h-4 bg-cyan-200/40 rounded-full absolute top-3 left-3 blur-[1px]"></div>
+                    <div class="w-2.5 h-3.5 bg-blue-900 absolute -bottom-2 rounded-sm"></div>
+                </div>
+                <div class="w-0.5 h-28 bg-gradient-to-b from-white/60 to-cyan-300/20 shadow-[0_0_8px_rgba(0,255,255,0.5)]"></div>
+            </div>
+        </div>
+
+        <div class="absolute right-3 sm:right-10 md:right-20 bottom-12 flex flex-col items-center gap-8 pointer-events-none z-10">
+            <div class="balloon-wrap flex flex-col items-center" style="animation-delay: 0.8s;">
+                <div class="w-16 h-22 sm:w-22 sm:h-30 bg-gradient-to-br from-purple-500 to-indigo-700 rounded-[50%_50%_50%_50%/40%_40%_60%_60%] shadow-[inset_-12px_-12px_24px_rgba(0,0,0,0.35),0_15px_30px_rgba(147,51,234,0.4)] relative">
+                    <div class="w-3.5 h-4.5 bg-purple-200/40 rounded-full absolute top-3 left-4 blur-[1px]"></div>
+                    <div class="w-2.5 h-3.5 bg-indigo-900 absolute -bottom-2 rounded-sm"></div>
+                </div>
+                <div class="w-0.5 h-26 bg-gradient-to-b from-white/60 to-purple-300/20 shadow-[0_0_8px_rgba(216,112,214,0.5)]"></div>
+            </div>
+            <div class="balloon-wrap flex flex-col items-center" style="animation-delay: 2s;">
+                <div class="w-14 h-20 sm:w-18 sm:h-26 bg-gradient-to-br from-amber-400 to-orange-600 rounded-[50%_50%_50%_50%/40%_40%_60%_60%] shadow-[inset_-10px_-10px_20px_rgba(0,0,0,0.35),0_15px_30px_rgba(245,158,11,0.4)] relative">
+                    <div class="w-3 h-4 bg-amber-200/40 rounded-full absolute top-3 left-3 blur-[1px]"></div>
+                    <div class="w-2.5 h-3.5 bg-orange-900 absolute -bottom-2 rounded-sm"></div>
+                </div>
+                <div class="w-0.5 h-24 bg-gradient-to-b from-white/60 to-amber-300/20 shadow-[0_0_8px_rgba(255,215,0,0.5)]"></div>
+            </div>
+        </div>
+
+        <!-- Luxurious Multi-Tier Cake (Stacked from Small Top Tier down to Big Bottom Tier) -->
+        <div class="flex flex-col items-center relative select-none mt-4">
+            
+            <!-- Tier 1: Smallest Top Tier (Candles placed on top of this tier) -->
+            <div class="w-[150px] sm:w-[190px] md:w-[220px] h-20 bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-300 rounded-t-3xl tier-shadow relative z-30 flex flex-col justify-between overflow-hidden border-t-2 border-white">
+                <!-- Frosting drips -->
+                <div class="w-full flex justify-between px-3">
+                    <div class="w-5 h-5 frosting-drip"></div>
+                    <div class="w-7 h-6 frosting-drip"></div>
+                    <div class="w-6 h-5 frosting-drip"></div>
+                    <div class="w-7 h-6 frosting-drip"></div>
+                    <div class="w-5 h-5 frosting-drip"></div>
+                </div>
+                <!-- Edible Pearl Deco Row -->
+                <div class="w-full flex justify-around pb-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-white shadow-md"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-white shadow-md"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-white shadow-md"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-white shadow-md"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-white shadow-md"></div>
+                </div>
+            </div>
+
+            <!-- Tier 2: Medium Middle Tier -->
+            <div class="w-[220px] sm:w-[280px] md:w-[320px] h-24 bg-gradient-to-r from-purple-400 via-indigo-500 to-purple-600 rounded-t-3xl tier-shadow relative -top-3 z-20 flex flex-col justify-between overflow-hidden border-t-2 border-purple-200/60">
+                <!-- Golden Ribbon / Deco band -->
+                <div class="absolute top-1/2 left-0 w-full h-4 bg-gradient-to-r from-amber-300 via-yellow-100 to-amber-400 shadow-md flex items-center justify-around">
+                    <div class="w-2.5 h-2.5 rounded-full bg-amber-600 border border-yellow-200"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-amber-600 border border-yellow-200"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-amber-600 border border-yellow-200"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-amber-600 border border-yellow-200"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-amber-600 border border-yellow-200"></div>
+                </div>
+                <!-- Frosting drips -->
+                <div class="w-full flex justify-between px-3">
+                    <div class="w-6 h-6 frosting-drip"></div>
+                    <div class="w-8 h-8 frosting-drip"></div>
+                    <div class="w-7 h-7 frosting-drip"></div>
+                    <div class="w-8 h-8 frosting-drip"></div>
+                    <div class="w-6 h-6 frosting-drip"></div>
+                </div>
+                <div class="w-full flex justify-center pb-2 opacity-80">
+                    <span class="text-[10px] text-pink-200 font-cinzel tracking-widest font-bold">✨ LUXURY CELEBRATION ✨</span>
+                </div>
+            </div>
+
+            <!-- Tier 3: Biggest Bottom Tier -->
+            <div class="w-[300px] sm:w-[380px] md:w-[440px] h-28 bg-gradient-to-r from-pink-400 via-rose-500 to-pink-600 rounded-t-3xl tier-shadow relative -top-6 z-10 flex flex-col justify-between overflow-hidden border-t-2 border-pink-200/60">
+                <!-- Golden Floral Pattern / Ribbon Band -->
+                <div class="absolute top-1/2 left-0 w-full h-5 bg-gradient-to-r from-amber-300 via-yellow-100 to-amber-400 shadow-md flex items-center justify-around px-4">
+                    <i class="fa-solid fa-star text-[10px] text-amber-700"></i>
+                    <i class="fa-solid fa-heart text-[10px] text-rose-700"></i>
+                    <i class="fa-solid fa-star text-[10px] text-amber-700"></i>
+                    <i class="fa-solid fa-heart text-[10px] text-rose-700"></i>
+                    <i class="fa-solid fa-star text-[10px] text-amber-700"></i>
+                    <i class="fa-solid fa-heart text-[10px] text-rose-700"></i>
+                </div>
+                <!-- Frosting drips -->
+                <div class="w-full flex justify-between px-3">
+                    <div class="w-8 h-7 frosting-drip"></div>
+                    <div class="w-10 h-9 frosting-drip"></div>
+                    <div class="w-12 h-8 frosting-drip"></div>
+                    <div class="w-10 h-9 frosting-drip"></div>
+                    <div class="w-8 h-7 frosting-drip"></div>
+                </div>
+                <div class="w-full flex justify-around pb-2 opacity-70">
+                    <div class="w-2 h-2 rounded-full bg-white"></div>
+                    <div class="w-2 h-2 rounded-full bg-white"></div>
+                    <div class="w-2 h-2 rounded-full bg-white"></div>
+                    <div class="w-2 h-2 rounded-full bg-white"></div>
+                    <div class="w-2 h-2 rounded-full bg-white"></div>
+                </div>
+            </div>
+
+            <!-- Cake Stand / Grand Silver Plate -->
+            <div class="w-[360px] sm:w-[480px] md:w-[560px] h-7 bg-gradient-to-r from-gray-300 via-white to-gray-400 rounded-full shadow-[0_25px_60px_rgba(0,0,0,0.7)] border-t border-white relative -top-8 z-0 flex items-center justify-center">
+                <div class="w-[320px] sm:w-[440px] md:w-[500px] h-2 bg-gray-400/40 rounded-full"></div>
+            </div>
+            <div class="w-[240px] sm:w-[300px] h-9 bg-gradient-to-r from-gray-400 via-gray-200 to-gray-500 rounded-b-3xl shadow-2xl relative -top-9"></div>
+
+            <!-- Glowing Candles Array on Top of Tier 1 -->
+            <div class="absolute -top-12 sm:-top-14 z-40 w-[120px] sm:w-[160px] flex justify-between items-end px-2">
+                <!-- Candle 1 -->
+                <div class="relative flex flex-col items-center candle-item cursor-pointer group" onclick="toggleCandle(this)">
+                    <div class="flame"></div>
+                    <div class="w-3.5 h-12 bg-gradient-to-r from-pink-400 via-white to-pink-500 rounded-sm shadow-md border-b border-pink-600 flex flex-col justify-around py-1">
+                        <div class="w-full h-0.5 bg-pink-600/40"></div>
+                        <div class="w-full h-0.5 bg-pink-600/40"></div>
+                    </div>
+                </div>
+                <!-- Candle 2 -->
+                <div class="relative flex flex-col items-center candle-item cursor-pointer group" onclick="toggleCandle(this)">
+                    <div class="flame" style="animation-delay: 0.05s;"></div>
+                    <div class="w-3.5 h-14 bg-gradient-to-r from-cyan-400 via-white to-cyan-500 rounded-sm shadow-md border-b border-cyan-600 flex flex-col justify-around py-1">
+                        <div class="w-full h-0.5 bg-cyan-600/40"></div>
+                        <div class="w-full h-0.5 bg-cyan-600/40"></div>
+                    </div>
+                </div>
+                <!-- Candle 3 (Center tallest) -->
+                <div class="relative flex flex-col items-center candle-item cursor-pointer group" onclick="toggleCandle(this)">
+                    <div class="flame" style="animation-delay: 0.1s;"></div>
+                    <div class="w-4 h-16 bg-gradient-to-r from-amber-300 via-white to-amber-400 rounded-sm shadow-md border-b border-amber-600 flex flex-col justify-around py-1">
+                        <div class="w-full h-0.5 bg-amber-600/40"></div>
+                        <div class="w-full h-0.5 bg-amber-600/40"></div>
+                        <div class="w-full h-0.5 bg-amber-600/40"></div>
+                    </div>
+                </div>
+                <!-- Candle 4 -->
+                <div class="relative flex flex-col items-center candle-item cursor-pointer group" onclick="toggleCandle(this)">
+                    <div class="flame" style="animation-delay: 0.04s;"></div>
+                    <div class="w-3.5 h-14 bg-gradient-to-r from-purple-400 via-white to-purple-500 rounded-sm shadow-md border-b border-purple-600 flex flex-col justify-around py-1">
+                        <div class="w-full h-0.5 bg-purple-600/40"></div>
+                        <div class="w-full h-0.5 bg-purple-600/40"></div>
+                    </div>
+                </div>
+                <!-- Candle 5 -->
+                <div class="relative flex flex-col items-center candle-item cursor-pointer group" onclick="toggleCandle(this)">
+                    <div class="flame" style="animation-delay: 0.08s;"></div>
+                    <div class="w-3.5 h-12 bg-gradient-to-r from-emerald-400 via-white to-emerald-500 rounded-sm shadow-md border-b border-emerald-600 flex flex-col justify-around py-1">
+                        <div class="w-full h-0.5 bg-emerald-600/40"></div>
+                        <div class="w-full h-0.5 bg-emerald-600/40"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Elegant Happy Birthday Greeting Prompt Below Cake -->
+        <div class="text-center mt-6 z-20 px-4 max-w-2xl">
+            <h1 id="greetingTitle" class="font-cinzel text-3xl sm:text-4xl md:text-5xl font-bold tracking-wider bg-gradient-to-r from-pink-300 via-amber-200 to-purple-300 bg-clip-text text-transparent drop-shadow-[0_5px_15px_rgba(255,105,180,0.4)]">
+                Happy Birthday, Sophia!
+            </h1>
+            <p id="greetingSubtitle" class="font-playfair italic text-pink-200/90 text-base sm:text-lg mt-2">
+                May your special day sparkle with immense joy, love, and unforgettable festival magic.
+            </p>
+        </div>
+
+    </main>
+
+    <!-- Interactive Control Deck Footer -->
+    <footer class="w-full max-w-3xl mx-auto px-4 pb-8 z-20 flex flex-wrap items-center justify-center gap-3">
+        <button onclick="extinguishAll()" class="px-5 py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-semibold rounded-2xl shadow-lg transition-all hover:scale-105 flex items-center gap-2 border border-amber-300/30 text-sm">
+            <i class="fa-solid fa-wind"></i> Blow Out Candles
+        </button>
+        <button onclick="lightAll()" class="px-5 py-3 bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-400 hover:to-rose-500 text-white font-semibold rounded-2xl shadow-lg transition-all hover:scale-105 flex items-center gap-2 border border-pink-300/30 text-sm">
+            <i class="fa-solid fa-fire-flame-curved"></i> Light Candles
+        </button>
+        <button onclick="triggerConfetti()" class="px-5 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-2xl shadow-lg transition-all hover:scale-105 flex items-center gap-2 border border-purple-300/30 text-sm">
+            <i class="fa-solid fa-champagne-glasses"></i> Festival Confetti
+        </button>
+    </footer>
+
+    <!-- Customization Modal Overlay -->
+    <div id="editModalOverlay" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-gray-900/90 border border-white/20 p-6 sm:p-8 rounded-3xl max-w-md w-full shadow-2xl relative">
+            <h3 class="font-cinzel text-xl text-amber-300 font-bold mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Customize Greeting
+            </h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-pink-300 font-semibold mb-1">Celebrant Name / Title</label>
+                    <input type="text" id="inputName" placeholder="e.g. Sophia" class="w-full bg-black/50 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-pink-400 text-sm" />
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-pink-300 font-semibold mb-1">Custom Greeting Message</label>
+                    <textarea id="inputMessage" rows="3" placeholder="Enter warm birthday wishes..." class="w-full bg-black/50 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-pink-400 text-sm resize-none"></textarea>
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 mt-6">
+                <button onclick="toggleEditModal()" class="px-5 py-2.5 bg-gray-700/60 hover:bg-gray-700 rounded-xl text-xs font-medium transition-colors">Cancel</button>
+                <button onclick="saveCustomGreeting()" class="px-5 py-2.5 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl text-xs font-semibold shadow-md transition-all hover:scale-105">Save & Celebrate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Custom Greeting Modal Logic
+        const editModalOverlay = document.getElementById('editModalOverlay');
+        const greetingTitle = document.getElementById('greetingTitle');
+        const greetingSubtitle = document.getElementById('greetingSubtitle');
+        const inputName = document.getElementById('inputName');
+        const inputMessage = document.getElementById('inputMessage');
+
+        function toggleEditModal() {
+            if (editModalOverlay.classList.contains('hidden')) {
+                inputName.value = greetingTitle.textContent.replace('Happy Birthday, ', '').replace('!', '');
+                inputMessage.value = greetingSubtitle.textContent;
+                editModalOverlay.classList.remove('hidden');
+            } else {
+                editModalOverlay.classList.add('hidden');
+            }
+        }
+
+        function saveCustomGreeting() {
+            const nameVal = inputName.value.trim() || 'Sophia';
+            const msgVal = inputMessage.value.trim() || 'May your special day sparkle with immense joy and love.';
+            greetingTitle.textContent = `Happy Birthday, ${nameVal}!`;
+            greetingSubtitle.textContent = msgVal;
+            toggleEditModal();
+            triggerConfetti();
+        }
+
+        // Candle Toggle / Blow Out function
+        function toggleCandle(candleEl) {
+            const flame = candleEl.querySelector('.flame');
+            if (!flame) return;
+
+            if (!flame.classList.contains('extinguished')) {
+                flame.classList.add('extinguished');
+                const smoke = document.createElement('div');
+                smoke.className = 'smoke';
+                candleEl.appendChild(smoke);
+                setTimeout(() => smoke.remove(), 1200);
+            } else {
+                flame.classList.remove('extinguished');
+            }
+        }
+
+        function extinguishAll() {
+            document.querySelectorAll('.flame').forEach(flame => {
+                if (!flame.classList.contains('extinguished')) {
+                    flame.classList.add('extinguished');
+                    const smoke = document.createElement('div');
+                    smoke.className = 'smoke';
+                    flame.parentElement.appendChild(smoke);
+                    setTimeout(() => smoke.remove(), 1200);
+                }
+            });
+        }
+
+        function lightAll() {
+            document.querySelectorAll('.flame').forEach(flame => {
+                flame.classList.remove('extinguished');
+            });
+            triggerConfetti();
+        }
+
+        // Web Audio API Ambient Festival Music Generator (No external URLs required)
+        let audioCtx = null;
+        let isPlayingAudio = false;
+        let audioInterval = null;
+
+        function toggleAudio() {
+            const audioIcon = document.getElementById('audioIcon');
+            const audioText = document.getElementById('audioText');
+
+            if (!isPlayingAudio) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    if (audioCtx.state === 'suspended') {
+                        audioCtx.resume();
+                    }
+                    isPlayingAudio = true;
+                    audioIcon.className = "fa-solid fa-volume-high text-amber-300 animate-pulse";
+                    audioText.textContent = "Music Playing";
+                    startMelody();
+                } catch (e) {
+                    console.error(e);
+                }
+            } else {
+                isPlayingAudio = false;
+                if (audioInterval) clearInterval(audioInterval);
+                if (audioCtx) audioCtx.close();
+                audioIcon.className = "fa-solid fa-volume-xmark text-amber-300";
+                audioText.textContent = "Play Music";
+            }
+        }
+
+        function startMelody() {
+            // Magical celebratory notes arpeggio
+            const notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 659.25]; // C5, E5, G5, C6, G5, E5
+            let index = 0;
+
+            audioInterval = setInterval(() => {
+                if (!isPlayingAudio || !audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(notes[index], audioCtx.currentTime);
+
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.2);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.2);
+
+                index = (index + 1) % notes.length;
+            }, 300);
+        }
+
+        // Canvas Particle & Confetti Animation Engine
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let particles = [];
+        const particleCount = 70;
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 2.5 + 0.5,
+                color: ['#ffd700', '#ff69b4', '#00ffff', '#ffffff', '#da70d6'][Math.floor(Math.random() * 5)],
+                speedY: Math.random() * -0.9 - 0.2,
+                speedX: (Math.random() - 0.5) * 0.6,
+                alpha: Math.random() * 0.7 + 0.3
+            });
+        }
+
+        let confettis = [];
+
+        function triggerConfetti() {
+            for (let i = 0; i < 140; i++) {
+                confettis.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2 + 50,
+                    radius: Math.random() * 6 + 3,
+                    color: ['#ff3366', '#ffcc00', '#00ffcc', '#cc33ff', '#33ccff', '#ffffff'][Math.floor(Math.random() * 6)],
+                    speedX: (Math.random() - 0.5) * 16,
+                    speedY: (Math.random() - 0.65) * 16,
+                    gravity: 0.32,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: (Math.random() - 0.5) * 18,
+                    alpha: 1
+                });
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Background Sparkles
+            particles.forEach(p => {
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = p.color;
+                ctx.fill();
+                ctx.restore();
+
+                p.y += p.speedY;
+                p.x += p.speedX;
+
+                if (p.y < 0) {
+                    p.y = canvas.height + 10;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+
+            // Draw Confetti
+            confettis.forEach((c, index) => {
+                ctx.save();
+                ctx.translate(c.x, c.y);
+                ctx.rotate((c.rotation * Math.PI) / 180);
+                ctx.globalAlpha = c.alpha;
+                ctx.fillStyle = c.color;
+                ctx.fillRect(-c.radius, -c.radius, c.radius * 2, c.radius * 2);
+                ctx.restore();
+
+                c.x += c.speedX;
+                c.y += c.speedY;
+                c.speedY += c.gravity;
+                c.rotation += c.rotationSpeed;
+                c.alpha -= 0.004;
+
+                if (c.alpha <= 0 || c.y > canvas.height) {
+                    confettis.splice(index, 1);
+                }
+            });
+
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+    </script>
+</body>
+</html>
